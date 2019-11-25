@@ -1,6 +1,6 @@
 # telcos-client-php
 
-Carga de cuentas de personas físicas.
+Presenta los creditos de la persona con servicios con domicilio asociado de: telefonía celular; televisión de paga; y, telefonía local y de larga distancia.
 
 ## Requisitos
 
