@@ -27,7 +27,7 @@ lib/Interceptor/*.pem
 
 
 # ignore arch
-TelcosApiTest Copy.php
+TelcosApiTest.txt
 
 
 

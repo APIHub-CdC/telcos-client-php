@@ -11,6 +11,7 @@ class CatalogoTipoDomicilio
     const C = 'C';
     const P = 'P';
     const E = 'E';
+    const ND = 'ND';
     
     
     public static function getAllowableEnumValues()
@@ -21,6 +22,7 @@ class CatalogoTipoDomicilio
             self::C,
             self::P,
             self::E,
+            self::ND,
         ];
     }
 }
