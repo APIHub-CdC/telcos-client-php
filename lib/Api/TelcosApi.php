@@ -205,7 +205,7 @@ class TelcosApi
                 'Missing the required parameter $body when calling getReporte'
             );
         }
-        $resourcePath = '/';
+        $resourcePath = '';
         $formParams = [];
         $queryParams = [];
         $headerParams = [];

@@ -12,6 +12,7 @@ class CatalogoEstadoCivil
     const S = 'S';
     const V = 'V';
     const E = 'E';
+    const ND = 'ND';
     
     
     public static function getAllowableEnumValues()
@@ -23,6 +24,7 @@ class CatalogoEstadoCivil
             self::S,
             self::V,
             self::E,
+            self::ND,
         ];
     }
 }
