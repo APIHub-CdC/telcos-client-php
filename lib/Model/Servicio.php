@@ -1,44 +1,46 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class Servicio implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'Servicio';
+    protected static $telcosModelName = 'Servicio';
     
-    protected static $TelcosSimulacionTypes = [
+    protected static $telcosTypes = [
         'fecha_apertura_cuenta' => 'string',
         'fecha_reporte' => 'string',
-        'clave_unidad_monetaria' => '\Telcos\Client\Model\CatalogoMoneda',
-        'saldo_actual' => 'string',
+        'clave_unidad_monetaria' => '\Telcos\MX\Client\Model\CatalogoMoneda',
+        'saldo_actual' => 'float',
         'pago_actual' => 'string',
         'id_domicilio' => 'string',
-        'fecha_cierre_cuenta' => 'string'
+        'fecha_cierre_cuenta' => 'string',
+        'cuenta_actual' => 'string'
     ];
     
-    protected static $TelcosSimulacionFormats = [
-        'fecha_apertura_cuenta' => 'dd/MM/yyyy',
-        'fecha_reporte' => 'dd/MM/yyyy',
+    protected static $telcosFormats = [
+        'fecha_apertura_cuenta' => 'yyyy-MM-dd',
+        'fecha_reporte' => 'yyyy-MM-dd',
         'clave_unidad_monetaria' => null,
-        'saldo_actual' => null,
+        'saldo_actual' => 'float',
         'pago_actual' => null,
         'id_domicilio' => null,
-        'fecha_cierre_cuenta' => 'dd/MM/yyyy'
+        'fecha_cierre_cuenta' => 'yyyy-MM-dd',
+        'cuenta_actual' => null
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
@@ -48,7 +50,8 @@ class Servicio implements ModelInterface, ArrayAccess
         'saldo_actual' => 'saldoActual',
         'pago_actual' => 'pagoActual',
         'id_domicilio' => 'idDomicilio',
-        'fecha_cierre_cuenta' => 'fechaCierreCuenta'
+        'fecha_cierre_cuenta' => 'fechaCierreCuenta',
+        'cuenta_actual' => 'cuentaActual'
     ];
     
     protected static $setters = [
@@ -58,7 +61,8 @@ class Servicio implements ModelInterface, ArrayAccess
         'saldo_actual' => 'setSaldoActual',
         'pago_actual' => 'setPagoActual',
         'id_domicilio' => 'setIdDomicilio',
-        'fecha_cierre_cuenta' => 'setFechaCierreCuenta'
+        'fecha_cierre_cuenta' => 'setFechaCierreCuenta',
+        'cuenta_actual' => 'setCuentaActual'
     ];
     
     protected static $getters = [
@@ -68,7 +72,8 @@ class Servicio implements ModelInterface, ArrayAccess
         'saldo_actual' => 'getSaldoActual',
         'pago_actual' => 'getPagoActual',
         'id_domicilio' => 'getIdDomicilio',
-        'fecha_cierre_cuenta' => 'getFechaCierreCuenta'
+        'fecha_cierre_cuenta' => 'getFechaCierreCuenta',
+        'cuenta_actual' => 'getCuentaActual'
     ];
     
     public static function attributeMap()
@@ -88,7 +93,7 @@ class Servicio implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     
@@ -104,16 +109,14 @@ class Servicio implements ModelInterface, ArrayAccess
         $this->container['pago_actual'] = isset($data['pago_actual']) ? $data['pago_actual'] : null;
         $this->container['id_domicilio'] = isset($data['id_domicilio']) ? $data['id_domicilio'] : null;
         $this->container['fecha_cierre_cuenta'] = isset($data['fecha_cierre_cuenta']) ? $data['fecha_cierre_cuenta'] : null;
+        $this->container['cuenta_actual'] = isset($data['cuenta_actual']) ? $data['cuenta_actual'] : null;
     }
     
     public function listInvalidProperties()
     {
         $invalidProperties = [];
-        if (!is_null($this->container['id_domicilio']) && (mb_strlen($this->container['id_domicilio']) > 20)) {
-            $invalidProperties[] = "invalid value for 'id_domicilio', the character length must be smaller than or equal to 20.";
-        }
-        if (!is_null($this->container['id_domicilio']) && (mb_strlen($this->container['id_domicilio']) < 0)) {
-            $invalidProperties[] = "invalid value for 'id_domicilio', the character length must be bigger than or equal to 0.";
+        if (!is_null($this->container['cuenta_actual']) && (mb_strlen($this->container['cuenta_actual']) > 25)) {
+            $invalidProperties[] = "invalid value for 'cuenta_actual', the character length must be smaller than or equal to 25.";
         }
         return $invalidProperties;
     }
@@ -185,12 +188,6 @@ class Servicio implements ModelInterface, ArrayAccess
     
     public function setIdDomicilio($id_domicilio)
     {
-        if (!is_null($id_domicilio) && (mb_strlen($id_domicilio) > 20)) {
-            throw new \InvalidArgumentException('invalid length for $id_domicilio when calling Servicio., must be smaller than or equal to 20.');
-        }
-        if (!is_null($id_domicilio) && (mb_strlen($id_domicilio) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $id_domicilio when calling Servicio., must be bigger than or equal to 0.');
-        }
         $this->container['id_domicilio'] = $id_domicilio;
         return $this;
     }
@@ -203,6 +200,20 @@ class Servicio implements ModelInterface, ArrayAccess
     public function setFechaCierreCuenta($fecha_cierre_cuenta)
     {
         $this->container['fecha_cierre_cuenta'] = $fecha_cierre_cuenta;
+        return $this;
+    }
+    
+    public function getCuentaActual()
+    {
+        return $this->container['cuenta_actual'];
+    }
+    
+    public function setCuentaActual($cuenta_actual)
+    {
+        if (!is_null($cuenta_actual) && (mb_strlen($cuenta_actual) > 25)) {
+            throw new \InvalidArgumentException('invalid length for $cuenta_actual when calling Servicio., must be smaller than or equal to 25.');
+        }
+        $this->container['cuenta_actual'] = $cuenta_actual;
         return $this;
     }
     

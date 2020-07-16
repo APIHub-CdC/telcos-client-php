@@ -1,59 +1,59 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class DomicilioPeticion implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'DomicilioPeticion';
+    protected static $telcosModelName = 'DomicilioPeticion';
     
-    protected static $TelcosSimulacionTypes = [
+    protected static $telcosTypes = [
         'direccion' => 'string',
-        'colonia' => 'string',
-        'municipio' => 'string',
+        'colonia_poblacion' => 'string',
+        'delegacion_municipio' => 'string',
         'ciudad' => 'string',
-        'estado' => '\Telcos\Client\Model\CatalogoEstados',
-        'codigo_postal' => 'string',
+        'estado' => '\Telcos\MX\Client\Model\CatalogoEstados',
+        'cp' => 'string',
         'fecha_residencia' => 'string',
         'numero_telefono' => 'string',
-        'tipo_domicilio' => '\Telcos\Client\Model\CatalogoTipoDomicilio',
-        'tipo_asentamiento' => '\Telcos\Client\Model\CatalogoTipoAsentamiento'
+        'tipo_domicilio' => '\Telcos\MX\Client\Model\CatalogoTipoDomicilio',
+        'tipo_asentamiento' => '\Telcos\MX\Client\Model\CatalogoTipoAsentamiento'
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
         'direccion' => null,
-        'colonia' => null,
-        'municipio' => null,
+        'colonia_poblacion' => null,
+        'delegacion_municipio' => null,
         'ciudad' => null,
         'estado' => null,
-        'codigo_postal' => null,
-        'fecha_residencia' => 'dd/MM/yyyy',
+        'cp' => null,
+        'fecha_residencia' => 'yyyy-MM-dd',
         'numero_telefono' => null,
         'tipo_domicilio' => null,
         'tipo_asentamiento' => null
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
         'direccion' => 'direccion',
-        'colonia' => 'colonia',
-        'municipio' => 'municipio',
+        'colonia_poblacion' => 'coloniaPoblacion',
+        'delegacion_municipio' => 'delegacionMunicipio',
         'ciudad' => 'ciudad',
         'estado' => 'estado',
-        'codigo_postal' => 'codigoPostal',
+        'cp' => 'CP',
         'fecha_residencia' => 'fechaResidencia',
         'numero_telefono' => 'numeroTelefono',
         'tipo_domicilio' => 'tipoDomicilio',
@@ -62,11 +62,11 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     
     protected static $setters = [
         'direccion' => 'setDireccion',
-        'colonia' => 'setColonia',
-        'municipio' => 'setMunicipio',
+        'colonia_poblacion' => 'setColoniaPoblacion',
+        'delegacion_municipio' => 'setDelegacionMunicipio',
         'ciudad' => 'setCiudad',
         'estado' => 'setEstado',
-        'codigo_postal' => 'setCodigoPostal',
+        'cp' => 'setCp',
         'fecha_residencia' => 'setFechaResidencia',
         'numero_telefono' => 'setNumeroTelefono',
         'tipo_domicilio' => 'setTipoDomicilio',
@@ -75,11 +75,11 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     
     protected static $getters = [
         'direccion' => 'getDireccion',
-        'colonia' => 'getColonia',
-        'municipio' => 'getMunicipio',
+        'colonia_poblacion' => 'getColoniaPoblacion',
+        'delegacion_municipio' => 'getDelegacionMunicipio',
         'ciudad' => 'getCiudad',
         'estado' => 'getEstado',
-        'codigo_postal' => 'getCodigoPostal',
+        'cp' => 'getCp',
         'fecha_residencia' => 'getFechaResidencia',
         'numero_telefono' => 'getNumeroTelefono',
         'tipo_domicilio' => 'getTipoDomicilio',
@@ -103,7 +103,7 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     
@@ -113,11 +113,11 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     public function __construct(array $data = null)
     {
         $this->container['direccion'] = isset($data['direccion']) ? $data['direccion'] : null;
-        $this->container['colonia'] = isset($data['colonia']) ? $data['colonia'] : null;
-        $this->container['municipio'] = isset($data['municipio']) ? $data['municipio'] : null;
+        $this->container['colonia_poblacion'] = isset($data['colonia_poblacion']) ? $data['colonia_poblacion'] : null;
+        $this->container['delegacion_municipio'] = isset($data['delegacion_municipio']) ? $data['delegacion_municipio'] : null;
         $this->container['ciudad'] = isset($data['ciudad']) ? $data['ciudad'] : null;
         $this->container['estado'] = isset($data['estado']) ? $data['estado'] : null;
-        $this->container['codigo_postal'] = isset($data['codigo_postal']) ? $data['codigo_postal'] : null;
+        $this->container['cp'] = isset($data['cp']) ? $data['cp'] : null;
         $this->container['fecha_residencia'] = isset($data['fecha_residencia']) ? $data['fecha_residencia'] : null;
         $this->container['numero_telefono'] = isset($data['numero_telefono']) ? $data['numero_telefono'] : null;
         $this->container['tipo_domicilio'] = isset($data['tipo_domicilio']) ? $data['tipo_domicilio'] : null;
@@ -130,32 +130,23 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
         if (!is_null($this->container['direccion']) && (mb_strlen($this->container['direccion']) > 85)) {
             $invalidProperties[] = "invalid value for 'direccion', the character length must be smaller than or equal to 85.";
         }
-        if (!is_null($this->container['direccion']) && (mb_strlen($this->container['direccion']) < 0)) {
-            $invalidProperties[] = "invalid value for 'direccion', the character length must be bigger than or equal to 0.";
+        if (!is_null($this->container['colonia_poblacion']) && (mb_strlen($this->container['colonia_poblacion']) > 65)) {
+            $invalidProperties[] = "invalid value for 'colonia_poblacion', the character length must be smaller than or equal to 65.";
         }
-        if (!is_null($this->container['colonia']) && (mb_strlen($this->container['colonia']) > 65)) {
-            $invalidProperties[] = "invalid value for 'colonia', the character length must be smaller than or equal to 65.";
-        }
-        if (!is_null($this->container['colonia']) && (mb_strlen($this->container['colonia']) < 0)) {
-            $invalidProperties[] = "invalid value for 'colonia', the character length must be bigger than or equal to 0.";
-        }
-        if (!is_null($this->container['municipio']) && (mb_strlen($this->container['municipio']) > 65)) {
-            $invalidProperties[] = "invalid value for 'municipio', the character length must be smaller than or equal to 65.";
-        }
-        if (!is_null($this->container['municipio']) && (mb_strlen($this->container['municipio']) < 0)) {
-            $invalidProperties[] = "invalid value for 'municipio', the character length must be bigger than or equal to 0.";
+        if (!is_null($this->container['delegacion_municipio']) && (mb_strlen($this->container['delegacion_municipio']) > 65)) {
+            $invalidProperties[] = "invalid value for 'delegacion_municipio', the character length must be smaller than or equal to 65.";
         }
         if (!is_null($this->container['ciudad']) && (mb_strlen($this->container['ciudad']) > 65)) {
             $invalidProperties[] = "invalid value for 'ciudad', the character length must be smaller than or equal to 65.";
         }
-        if (!is_null($this->container['ciudad']) && (mb_strlen($this->container['ciudad']) < 0)) {
-            $invalidProperties[] = "invalid value for 'ciudad', the character length must be bigger than or equal to 0.";
+        if (!is_null($this->container['cp']) && (mb_strlen($this->container['cp']) > 5)) {
+            $invalidProperties[] = "invalid value for 'cp', the character length must be smaller than or equal to 5.";
         }
-        if (!is_null($this->container['codigo_postal']) && (mb_strlen($this->container['codigo_postal']) > 5)) {
-            $invalidProperties[] = "invalid value for 'codigo_postal', the character length must be smaller than or equal to 5.";
+        if (!is_null($this->container['cp']) && (mb_strlen($this->container['cp']) < 5)) {
+            $invalidProperties[] = "invalid value for 'cp', the character length must be bigger than or equal to 5.";
         }
-        if (!is_null($this->container['codigo_postal']) && (mb_strlen($this->container['codigo_postal']) < 5)) {
-            $invalidProperties[] = "invalid value for 'codigo_postal', the character length must be bigger than or equal to 5.";
+        if (!is_null($this->container['numero_telefono']) && (mb_strlen($this->container['numero_telefono']) > 20)) {
+            $invalidProperties[] = "invalid value for 'numero_telefono', the character length must be smaller than or equal to 20.";
         }
         return $invalidProperties;
     }
@@ -175,44 +166,35 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
         if (!is_null($direccion) && (mb_strlen($direccion) > 85)) {
             throw new \InvalidArgumentException('invalid length for $direccion when calling DomicilioPeticion., must be smaller than or equal to 85.');
         }
-        if (!is_null($direccion) && (mb_strlen($direccion) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $direccion when calling DomicilioPeticion., must be bigger than or equal to 0.');
-        }
         $this->container['direccion'] = $direccion;
         return $this;
     }
     
-    public function getColonia()
+    public function getColoniaPoblacion()
     {
-        return $this->container['colonia'];
+        return $this->container['colonia_poblacion'];
     }
     
-    public function setColonia($colonia)
+    public function setColoniaPoblacion($colonia_poblacion)
     {
-        if (!is_null($colonia) && (mb_strlen($colonia) > 65)) {
-            throw new \InvalidArgumentException('invalid length for $colonia when calling DomicilioPeticion., must be smaller than or equal to 65.');
+        if (!is_null($colonia_poblacion) && (mb_strlen($colonia_poblacion) > 65)) {
+            throw new \InvalidArgumentException('invalid length for $colonia_poblacion when calling DomicilioPeticion., must be smaller than or equal to 65.');
         }
-        if (!is_null($colonia) && (mb_strlen($colonia) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $colonia when calling DomicilioPeticion., must be bigger than or equal to 0.');
-        }
-        $this->container['colonia'] = $colonia;
+        $this->container['colonia_poblacion'] = $colonia_poblacion;
         return $this;
     }
     
-    public function getMunicipio()
+    public function getDelegacionMunicipio()
     {
-        return $this->container['municipio'];
+        return $this->container['delegacion_municipio'];
     }
     
-    public function setMunicipio($municipio)
+    public function setDelegacionMunicipio($delegacion_municipio)
     {
-        if (!is_null($municipio) && (mb_strlen($municipio) > 65)) {
-            throw new \InvalidArgumentException('invalid length for $municipio when calling DomicilioPeticion., must be smaller than or equal to 65.');
+        if (!is_null($delegacion_municipio) && (mb_strlen($delegacion_municipio) > 65)) {
+            throw new \InvalidArgumentException('invalid length for $delegacion_municipio when calling DomicilioPeticion., must be smaller than or equal to 65.');
         }
-        if (!is_null($municipio) && (mb_strlen($municipio) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $municipio when calling DomicilioPeticion., must be bigger than or equal to 0.');
-        }
-        $this->container['municipio'] = $municipio;
+        $this->container['delegacion_municipio'] = $delegacion_municipio;
         return $this;
     }
     
@@ -225,9 +207,6 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     {
         if (!is_null($ciudad) && (mb_strlen($ciudad) > 65)) {
             throw new \InvalidArgumentException('invalid length for $ciudad when calling DomicilioPeticion., must be smaller than or equal to 65.');
-        }
-        if (!is_null($ciudad) && (mb_strlen($ciudad) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $ciudad when calling DomicilioPeticion., must be bigger than or equal to 0.');
         }
         $this->container['ciudad'] = $ciudad;
         return $this;
@@ -244,20 +223,20 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
         return $this;
     }
     
-    public function getCodigoPostal()
+    public function getCp()
     {
-        return $this->container['codigo_postal'];
+        return $this->container['cp'];
     }
     
-    public function setCodigoPostal($codigo_postal)
+    public function setCp($cp)
     {
-        if (!is_null($codigo_postal) && (mb_strlen($codigo_postal) > 5)) {
-            throw new \InvalidArgumentException('invalid length for $codigo_postal when calling DomicilioPeticion., must be smaller than or equal to 5.');
+        if (!is_null($cp) && (mb_strlen($cp) > 5)) {
+            throw new \InvalidArgumentException('invalid length for $cp when calling DomicilioPeticion., must be smaller than or equal to 5.');
         }
-        if (!is_null($codigo_postal) && (mb_strlen($codigo_postal) < 5)) {
-            throw new \InvalidArgumentException('invalid length for $codigo_postal when calling DomicilioPeticion., must be bigger than or equal to 5.');
+        if (!is_null($cp) && (mb_strlen($cp) < 5)) {
+            throw new \InvalidArgumentException('invalid length for $cp when calling DomicilioPeticion., must be bigger than or equal to 5.');
         }
-        $this->container['codigo_postal'] = $codigo_postal;
+        $this->container['cp'] = $cp;
         return $this;
     }
     
@@ -279,6 +258,9 @@ class DomicilioPeticion implements ModelInterface, ArrayAccess
     
     public function setNumeroTelefono($numero_telefono)
     {
+        if (!is_null($numero_telefono) && (mb_strlen($numero_telefono) > 20)) {
+            throw new \InvalidArgumentException('invalid length for $numero_telefono when calling DomicilioPeticion., must be smaller than or equal to 20.');
+        }
         $this->container['numero_telefono'] = $numero_telefono;
         return $this;
     }

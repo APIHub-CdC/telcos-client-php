@@ -1,6 +1,6 @@
 <?php
 
-namespace Telcos\Client;
+namespace Telcos\MX\Client;
 
 class Configuration
 {
@@ -18,7 +18,7 @@ class Configuration
     
     protected $host = '';
     
-    protected $userAgent = 'Telcos-Codegen/1.0.0/php';
+    protected $userAgent = 'Telcos\MX-Codegen/1.0.0/php';
     
     protected $debug = false;
     
@@ -159,10 +159,10 @@ class Configuration
     
     public static function toDebugReport()
     {
-        $report  = 'PHP SDK (Telcos\Client) Debug Report:' . PHP_EOL;
+        $report  = 'PHP SDK (Telcos\MX\Client) Debug Report:' . PHP_EOL;
         $report .= '    OS: ' . php_uname() . PHP_EOL;
         $report .= '    PHP Version: ' . PHP_VERSION . PHP_EOL;
-        $report .= '    OpenAPI Spec Version: 1.1.0' . PHP_EOL;
+        $report .= '    OpenAPI Spec Version: 1.0.2' . PHP_EOL;
         $report .= '    Temp Folder Path: ' . self::getDefaultConfiguration()->getTempFolderPath() . PHP_EOL;
         return $report;
     }

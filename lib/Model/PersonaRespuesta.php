@@ -1,17 +1,17 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class PersonaRespuesta implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'PersonaRespuesta';
+    protected static $telcosModelName = 'PersonaRespuesta';
     
-    protected static $TelcosSimulacionTypes = [
+    protected static $telcosTypes = [
         'nombres' => 'string',
         'apellido_paterno' => 'string',
         'apellido_materno' => 'string',
@@ -20,21 +20,21 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         'rfc' => 'string',
         'curp' => 'string',
         'numero_seguridad_social' => 'string',
-        'nacionalidad' => 'string',
-        'residencia' => '\Telcos\Client\Model\CatalogoResidencia',
-        'estado_civil' => '\Telcos\Client\Model\CatalogoEstadoCivil',
-        'sexo' => '\Telcos\Client\Model\CatalogoSexo',
-        'clave_elector' => 'string',
-        'numero_dependientes' => 'string',
+        'nacionalidad' => '\Telcos\MX\Client\Model\CatalogoNacionalidad',
+        'residencia' => '\Telcos\MX\Client\Model\CatalogoResidencia',
+        'estado_civil' => '\Telcos\MX\Client\Model\CatalogoEstadoCivil',
+        'sexo' => '\Telcos\MX\Client\Model\CatalogoSexo',
+        'clave_elector_ife' => 'string',
+        'numero_dependientes' => 'int',
         'fecha_defuncion' => 'string'
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
         'nombres' => null,
         'apellido_paterno' => null,
         'apellido_materno' => null,
         'apellido_adicional' => null,
-        'fecha_nacimiento' => 'dd/MM/yyyy',
+        'fecha_nacimiento' => 'yyyy-MM-dd',
         'rfc' => null,
         'curp' => null,
         'numero_seguridad_social' => null,
@@ -42,19 +42,19 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         'residencia' => null,
         'estado_civil' => null,
         'sexo' => null,
-        'clave_elector' => null,
-        'numero_dependientes' => null,
-        'fecha_defuncion' => 'dd/MM/yyyy'
+        'clave_elector_ife' => null,
+        'numero_dependientes' => 'int32',
+        'fecha_defuncion' => 'yyyy-MM-dd'
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
@@ -63,14 +63,14 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         'apellido_materno' => 'apellidoMaterno',
         'apellido_adicional' => 'apellidoAdicional',
         'fecha_nacimiento' => 'fechaNacimiento',
-        'rfc' => 'rfc',
-        'curp' => 'curp',
+        'rfc' => 'RFC',
+        'curp' => 'CURP',
         'numero_seguridad_social' => 'numeroSeguridadSocial',
         'nacionalidad' => 'nacionalidad',
         'residencia' => 'residencia',
         'estado_civil' => 'estadoCivil',
         'sexo' => 'sexo',
-        'clave_elector' => 'claveElector',
+        'clave_elector_ife' => 'claveElectorIFE',
         'numero_dependientes' => 'numeroDependientes',
         'fecha_defuncion' => 'fechaDefuncion'
     ];
@@ -88,7 +88,7 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         'residencia' => 'setResidencia',
         'estado_civil' => 'setEstadoCivil',
         'sexo' => 'setSexo',
-        'clave_elector' => 'setClaveElector',
+        'clave_elector_ife' => 'setClaveElectorIfe',
         'numero_dependientes' => 'setNumeroDependientes',
         'fecha_defuncion' => 'setFechaDefuncion'
     ];
@@ -106,7 +106,7 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         'residencia' => 'getResidencia',
         'estado_civil' => 'getEstadoCivil',
         'sexo' => 'getSexo',
-        'clave_elector' => 'getClaveElector',
+        'clave_elector_ife' => 'getClaveElectorIfe',
         'numero_dependientes' => 'getNumeroDependientes',
         'fecha_defuncion' => 'getFechaDefuncion'
     ];
@@ -128,7 +128,7 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     
@@ -149,7 +149,7 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         $this->container['residencia'] = isset($data['residencia']) ? $data['residencia'] : null;
         $this->container['estado_civil'] = isset($data['estado_civil']) ? $data['estado_civil'] : null;
         $this->container['sexo'] = isset($data['sexo']) ? $data['sexo'] : null;
-        $this->container['clave_elector'] = isset($data['clave_elector']) ? $data['clave_elector'] : null;
+        $this->container['clave_elector_ife'] = isset($data['clave_elector_ife']) ? $data['clave_elector_ife'] : null;
         $this->container['numero_dependientes'] = isset($data['numero_dependientes']) ? $data['numero_dependientes'] : null;
         $this->container['fecha_defuncion'] = isset($data['fecha_defuncion']) ? $data['fecha_defuncion'] : null;
     }
@@ -172,23 +172,14 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         if ((mb_strlen($this->container['apellido_paterno']) > 30)) {
             $invalidProperties[] = "invalid value for 'apellido_paterno', the character length must be smaller than or equal to 30.";
         }
-        if ((mb_strlen($this->container['apellido_paterno']) < 0)) {
-            $invalidProperties[] = "invalid value for 'apellido_paterno', the character length must be bigger than or equal to 0.";
-        }
         if ($this->container['apellido_materno'] === null) {
             $invalidProperties[] = "'apellido_materno' can't be null";
         }
         if ((mb_strlen($this->container['apellido_materno']) > 30)) {
             $invalidProperties[] = "invalid value for 'apellido_materno', the character length must be smaller than or equal to 30.";
         }
-        if ((mb_strlen($this->container['apellido_materno']) < 0)) {
-            $invalidProperties[] = "invalid value for 'apellido_materno', the character length must be bigger than or equal to 0.";
-        }
         if (!is_null($this->container['apellido_adicional']) && (mb_strlen($this->container['apellido_adicional']) > 30)) {
             $invalidProperties[] = "invalid value for 'apellido_adicional', the character length must be smaller than or equal to 30.";
-        }
-        if (!is_null($this->container['apellido_adicional']) && (mb_strlen($this->container['apellido_adicional']) < 0)) {
-            $invalidProperties[] = "invalid value for 'apellido_adicional', the character length must be bigger than or equal to 0.";
         }
         if ($this->container['fecha_nacimiento'] === null) {
             $invalidProperties[] = "'fecha_nacimiento' can't be null";
@@ -196,20 +187,8 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         if (!is_null($this->container['numero_seguridad_social']) && (mb_strlen($this->container['numero_seguridad_social']) > 11)) {
             $invalidProperties[] = "invalid value for 'numero_seguridad_social', the character length must be smaller than or equal to 11.";
         }
-        if (!is_null($this->container['numero_seguridad_social']) && (mb_strlen($this->container['numero_seguridad_social']) < 11)) {
-            $invalidProperties[] = "invalid value for 'numero_seguridad_social', the character length must be bigger than or equal to 11.";
-        }
-        if (!is_null($this->container['nacionalidad']) && (mb_strlen($this->container['nacionalidad']) > 2)) {
-            $invalidProperties[] = "invalid value for 'nacionalidad', the character length must be smaller than or equal to 2.";
-        }
-        if (!is_null($this->container['nacionalidad']) && (mb_strlen($this->container['nacionalidad']) < 2)) {
-            $invalidProperties[] = "invalid value for 'nacionalidad', the character length must be bigger than or equal to 2.";
-        }
-        if (!is_null($this->container['clave_elector']) && (mb_strlen($this->container['clave_elector']) > 20)) {
-            $invalidProperties[] = "invalid value for 'clave_elector', the character length must be smaller than or equal to 20.";
-        }
-        if (!is_null($this->container['clave_elector']) && (mb_strlen($this->container['clave_elector']) < 20)) {
-            $invalidProperties[] = "invalid value for 'clave_elector', the character length must be bigger than or equal to 20.";
+        if (!is_null($this->container['clave_elector_ife']) && (mb_strlen($this->container['clave_elector_ife']) > 20)) {
+            $invalidProperties[] = "invalid value for 'clave_elector_ife', the character length must be smaller than or equal to 20.";
         }
         return $invalidProperties;
     }
@@ -246,9 +225,6 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         if ((mb_strlen($apellido_paterno) > 30)) {
             throw new \InvalidArgumentException('invalid length for $apellido_paterno when calling PersonaRespuesta., must be smaller than or equal to 30.');
         }
-        if ((mb_strlen($apellido_paterno) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $apellido_paterno when calling PersonaRespuesta., must be bigger than or equal to 0.');
-        }
         $this->container['apellido_paterno'] = $apellido_paterno;
         return $this;
     }
@@ -263,9 +239,6 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         if ((mb_strlen($apellido_materno) > 30)) {
             throw new \InvalidArgumentException('invalid length for $apellido_materno when calling PersonaRespuesta., must be smaller than or equal to 30.');
         }
-        if ((mb_strlen($apellido_materno) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $apellido_materno when calling PersonaRespuesta., must be bigger than or equal to 0.');
-        }
         $this->container['apellido_materno'] = $apellido_materno;
         return $this;
     }
@@ -279,9 +252,6 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
     {
         if (!is_null($apellido_adicional) && (mb_strlen($apellido_adicional) > 30)) {
             throw new \InvalidArgumentException('invalid length for $apellido_adicional when calling PersonaRespuesta., must be smaller than or equal to 30.');
-        }
-        if (!is_null($apellido_adicional) && (mb_strlen($apellido_adicional) < 0)) {
-            throw new \InvalidArgumentException('invalid length for $apellido_adicional when calling PersonaRespuesta., must be bigger than or equal to 0.');
         }
         $this->container['apellido_adicional'] = $apellido_adicional;
         return $this;
@@ -330,9 +300,6 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         if (!is_null($numero_seguridad_social) && (mb_strlen($numero_seguridad_social) > 11)) {
             throw new \InvalidArgumentException('invalid length for $numero_seguridad_social when calling PersonaRespuesta., must be smaller than or equal to 11.');
         }
-        if (!is_null($numero_seguridad_social) && (mb_strlen($numero_seguridad_social) < 11)) {
-            throw new \InvalidArgumentException('invalid length for $numero_seguridad_social when calling PersonaRespuesta., must be bigger than or equal to 11.');
-        }
         $this->container['numero_seguridad_social'] = $numero_seguridad_social;
         return $this;
     }
@@ -344,12 +311,6 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
     
     public function setNacionalidad($nacionalidad)
     {
-        if (!is_null($nacionalidad) && (mb_strlen($nacionalidad) > 2)) {
-            throw new \InvalidArgumentException('invalid length for $nacionalidad when calling PersonaRespuesta., must be smaller than or equal to 2.');
-        }
-        if (!is_null($nacionalidad) && (mb_strlen($nacionalidad) < 2)) {
-            throw new \InvalidArgumentException('invalid length for $nacionalidad when calling PersonaRespuesta., must be bigger than or equal to 2.');
-        }
         $this->container['nacionalidad'] = $nacionalidad;
         return $this;
     }
@@ -387,20 +348,17 @@ class PersonaRespuesta implements ModelInterface, ArrayAccess
         return $this;
     }
     
-    public function getClaveElector()
+    public function getClaveElectorIfe()
     {
-        return $this->container['clave_elector'];
+        return $this->container['clave_elector_ife'];
     }
     
-    public function setClaveElector($clave_elector)
+    public function setClaveElectorIfe($clave_elector_ife)
     {
-        if (!is_null($clave_elector) && (mb_strlen($clave_elector) > 20)) {
-            throw new \InvalidArgumentException('invalid length for $clave_elector when calling PersonaRespuesta., must be smaller than or equal to 20.');
+        if (!is_null($clave_elector_ife) && (mb_strlen($clave_elector_ife) > 20)) {
+            throw new \InvalidArgumentException('invalid length for $clave_elector_ife when calling PersonaRespuesta., must be smaller than or equal to 20.');
         }
-        if (!is_null($clave_elector) && (mb_strlen($clave_elector) < 20)) {
-            throw new \InvalidArgumentException('invalid length for $clave_elector when calling PersonaRespuesta., must be bigger than or equal to 20.');
-        }
-        $this->container['clave_elector'] = $clave_elector;
+        $this->container['clave_elector_ife'] = $clave_elector_ife;
         return $this;
     }
     

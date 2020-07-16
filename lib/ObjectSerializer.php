@@ -1,6 +1,6 @@
 <?php
 
-namespace Telcos\Client;
+namespace Telcos\MX\Client;
 
 class ObjectSerializer
 {
@@ -23,19 +23,19 @@ class ObjectSerializer
             return $data;
         } elseif (is_object($data)) {
             $values = [];
-            $formats = $data::TelcosSimulacionFormats();
-            foreach ($data::TelcosSimulacionTypes() as $property => $TelcosSimulacionType) {
+            $formats = $data::telcosFormats();
+            foreach ($data::telcosTypes() as $property => $telcosType) {
                 $getter = $data::getters()[$property];
                 $value = $data->$getter();
                 if ($value !== null
-                    && !in_array($TelcosSimulacionType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
-                    && method_exists($TelcosSimulacionType, 'getAllowableEnumValues')
-                    && !in_array($value, $TelcosSimulacionType::getAllowableEnumValues(), true)) {
-                    $imploded = implode("', '", $TelcosSimulacionType::getAllowableEnumValues());
-                    throw new \InvalidArgumentException("Invalid value for enum '$TelcosSimulacionType', must be one of: '$imploded'");
+                    && !in_array($telcosType, ['DateTime', 'bool', 'boolean', 'byte', 'double', 'float', 'int', 'integer', 'mixed', 'number', 'object', 'string', 'void'], true)
+                    && method_exists($telcosType, 'getAllowableEnumValues')
+                    && !in_array($value, $telcosType::getAllowableEnumValues(), true)) {
+                    $imploded = implode("', '", $telcosType::getAllowableEnumValues());
+                    throw new \InvalidArgumentException("Invalid value for enum '$telcosType', must be one of: '$imploded'");
                 }
                 if ($value !== null) {
-                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $TelcosSimulacionType, $formats[$property]);
+                    $values[$data::attributeMap()[$property]] = self::sanitizeForSerialization($value, $telcosType, $formats[$property]);
                 }
             }
             return (object)$values;
@@ -165,13 +165,13 @@ class ObjectSerializer
         } else {
             $discriminator = $class::DISCRIMINATOR;
             if (!empty($discriminator) && isset($data->{$discriminator}) && is_string($data->{$discriminator})) {
-                $subclass = '\Telcos\Client\Model\\' . $data->{$discriminator};
+                $subclass = '\Telcos\MX\Client\Model\\' . $data->{$discriminator};
                 if (is_subclass_of($subclass, $class)) {
                     $class = $subclass;
                 }
             }
             $instance = new $class();
-            foreach ($instance::TelcosSimulacionTypes() as $property => $type) {
+            foreach ($instance::telcosTypes() as $property => $type) {
                 $propertySetter = $instance::setters()[$property];
                 if (!isset($propertySetter) || !isset($data->{$instance::attributeMap()[$property]})) {
                     continue;
