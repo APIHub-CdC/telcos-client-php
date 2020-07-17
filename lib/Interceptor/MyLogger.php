@@ -1,6 +1,6 @@
 <?php
 
-namespace Telcos\Client\Interceptor;
+namespace Telcos\MX\Client\Interceptor;
 
 use \Monolog\Logger;
 use \Monolog\Formatter\LineFormatter;

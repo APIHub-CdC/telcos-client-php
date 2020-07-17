@@ -5,20 +5,20 @@ namespace Telcos\MX\Client\Model;
 use \ArrayAccess;
 use \Telcos\MX\Client\ObjectSerializer;
 
-class Error implements ModelInterface, ArrayAccess
+class Peticion implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $telcosModelName = 'Error';
+    protected static $telcosModelName = 'Peticion';
     
     protected static $telcosTypes = [
-        'codigo' => 'string',
-        'mensaje' => 'string'
+        'folio_otorgante' => 'string',
+        'persona' => '\Telcos\MX\Client\Model\PersonaPeticion'
     ];
     
     protected static $telcosFormats = [
-        'codigo' => null,
-        'mensaje' => null
+        'folio_otorgante' => null,
+        'persona' => null
     ];
     
     public static function telcosTypes()
@@ -32,18 +32,18 @@ class Error implements ModelInterface, ArrayAccess
     }
     
     protected static $attributeMap = [
-        'codigo' => 'codigo',
-        'mensaje' => 'mensaje'
+        'folio_otorgante' => 'folioOtorgante',
+        'persona' => 'persona'
     ];
     
     protected static $setters = [
-        'codigo' => 'setCodigo',
-        'mensaje' => 'setMensaje'
+        'folio_otorgante' => 'setFolioOtorgante',
+        'persona' => 'setPersona'
     ];
     
     protected static $getters = [
-        'codigo' => 'getCodigo',
-        'mensaje' => 'getMensaje'
+        'folio_otorgante' => 'getFolioOtorgante',
+        'persona' => 'getPersona'
     ];
     
     public static function attributeMap()
@@ -72,13 +72,16 @@ class Error implements ModelInterface, ArrayAccess
     
     public function __construct(array $data = null)
     {
-        $this->container['codigo'] = isset($data['codigo']) ? $data['codigo'] : null;
-        $this->container['mensaje'] = isset($data['mensaje']) ? $data['mensaje'] : null;
+        $this->container['folio_otorgante'] = isset($data['folio_otorgante']) ? $data['folio_otorgante'] : null;
+        $this->container['persona'] = isset($data['persona']) ? $data['persona'] : null;
     }
     
     public function listInvalidProperties()
     {
         $invalidProperties = [];
+        if ($this->container['folio_otorgante'] === null) {
+            $invalidProperties[] = "'folio_otorgante' can't be null";
+        }
         return $invalidProperties;
     }
     
@@ -87,25 +90,25 @@ class Error implements ModelInterface, ArrayAccess
         return count($this->listInvalidProperties()) === 0;
     }
     
-    public function getCodigo()
+    public function getFolioOtorgante()
     {
-        return $this->container['codigo'];
+        return $this->container['folio_otorgante'];
     }
     
-    public function setCodigo($codigo)
+    public function setFolioOtorgante($folio_otorgante)
     {
-        $this->container['codigo'] = $codigo;
+        $this->container['folio_otorgante'] = $folio_otorgante;
         return $this;
     }
     
-    public function getMensaje()
+    public function getPersona()
     {
-        return $this->container['mensaje'];
+        return $this->container['persona'];
     }
     
-    public function setMensaje($mensaje)
+    public function setPersona($persona)
     {
-        $this->container['mensaje'] = $mensaje;
+        $this->container['persona'] = $persona;
         return $this;
     }
     

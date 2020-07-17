@@ -1,43 +1,48 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class Errores implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'Errores';
+    protected static $telcosModelName = 'Errores';
     
-    protected static $TelcosSimulacionTypes = [
-        'errores' => '\Telcos\Client\Model\Error[]'
+    protected static $telcosTypes = [
+        'folio_consulta' => 'string',
+        'errores' => '\Telcos\MX\Client\Model\Error[]'
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
+        'folio_consulta' => null,
         'errores' => null
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
+        'folio_consulta' => 'folioConsulta',
         'errores' => 'errores'
     ];
     
     protected static $setters = [
+        'folio_consulta' => 'setFolioConsulta',
         'errores' => 'setErrores'
     ];
     
     protected static $getters = [
+        'folio_consulta' => 'getFolioConsulta',
         'errores' => 'getErrores'
     ];
     
@@ -58,7 +63,7 @@ class Errores implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     
@@ -67,6 +72,7 @@ class Errores implements ModelInterface, ArrayAccess
     
     public function __construct(array $data = null)
     {
+        $this->container['folio_consulta'] = isset($data['folio_consulta']) ? $data['folio_consulta'] : null;
         $this->container['errores'] = isset($data['errores']) ? $data['errores'] : null;
     }
     
@@ -79,6 +85,17 @@ class Errores implements ModelInterface, ArrayAccess
     public function valid()
     {
         return count($this->listInvalidProperties()) === 0;
+    }
+    
+    public function getFolioConsulta()
+    {
+        return $this->container['folio_consulta'];
+    }
+    
+    public function setFolioConsulta($folio_consulta)
+    {
+        $this->container['folio_consulta'] = $folio_consulta;
+        return $this;
     }
     
     public function getErrores()

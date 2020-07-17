@@ -1,6 +1,6 @@
 <?php
 
-namespace Telcos\Client;
+namespace Telcos\MX\Client;
 
 use \Exception;
 

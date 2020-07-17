@@ -1,15 +1,15 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 interface ModelInterface
 {
     
     public function getModelName();
     
-    public static function TelcosSimulacionTypes();
+    public static function telcosTypes();
     
-    public static function TelcosSimulacionFormats();
+    public static function telcosFormats();
     
     public static function attributeMap();
     
