@@ -1,36 +1,36 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class Servicios implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'Servicios';
+    protected static $telcosModelName = 'Servicios';
     
-    protected static $TelcosSimulacionTypes = [
-        'telefonia_celular' => '\Telcos\Client\Model\TelefoniaCelular',
-        'television_paga' => '\Telcos\Client\Model\TelevisionPaga',
-        'telefonia_local_distancia' => '\Telcos\Client\Model\TelefoniaLocalDistancia'
+    protected static $telcosTypes = [
+        'telefonia_celular' => '\Telcos\MX\Client\Model\TelefoniaCelular',
+        'television_paga' => '\Telcos\MX\Client\Model\TelevisionPaga',
+        'telefonia_local_distancia' => '\Telcos\MX\Client\Model\TelefoniaLocalDistancia'
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
         'telefonia_celular' => null,
         'television_paga' => null,
         'telefonia_local_distancia' => null
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
@@ -68,7 +68,7 @@ class Servicios implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     

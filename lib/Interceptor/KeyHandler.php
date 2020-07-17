@@ -1,12 +1,12 @@
 <?php
 
-namespace Telcos\Client\Interceptor;
+namespace Telcos\MX\Client\Interceptor;
 
 use \Monolog\Logger;
 use \Monolog\Formatter\LineFormatter;
 use \Monolog\Handler\StreamHandler;
 
-use \Telcos\Client\Interceptor\MyLogger;
+use \Telcos\MX\Client\Interceptor\MyLogger;
 
 Class KeyHandler{
     private $private_key = null;

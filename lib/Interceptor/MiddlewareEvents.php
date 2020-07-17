@@ -1,33 +1,41 @@
 <?php
 
-namespace Telcos\Client\Interceptor;
+namespace Telcos\MX\Client\Interceptor;
 
 use \GuzzleHttp\Middleware;
 use \GuzzleHttp\Psr7\Stream;
 use \Psr\Http\Message\RequestInterface as streamRequest;
 use \Psr\Http\Message\ResponseInterface as streamResponse;
 
-use \Telcos\Client\Interceptor\KeyHandler;
-use \Telcos\Client\Interceptor\MyLogger;
-use \Telcos\Client\Model\Errors;
-use \Telcos\Client\Model\Error;
+use \Telcos\MX\Client\Interceptor\KeyHandler;
+use \Telcos\MX\Client\Interceptor\MyLogger;
+use \Telcos\MX\Client\Model\Errors;
+use \Telcos\MX\Client\Model\Error;
 
 class MiddlewareEvents
 {
     
-    function __construct(\Telcos\Client\Interceptor\KeyHandler $signer)
+    function __construct(\Telcos\MX\Client\Interceptor\KeyHandler $signer)
     {
         $this->signer = $signer;
         $this->logger = new MyLogger('MiddlewareEvents');
     }
     function add_signature_header($header){
-        return \GuzzleHttp\Middleware::mapRequest(function (streamRequest $request) use ($header){
+        return middleware::mapRequest(function (streamRequest $request) use ($header){
             try{
-                $this->logger->info("Begining signature...");
-                $stream = $request->getBody();
-                $payload = $stream->getContents();
-                $stream->rewind();
-                $signature = $this->signer->getSignatureFromPrivateKey($payload);
+                if ($request->getMethod() == "POST"){
+                    $this->logger->info("Beginning signature method POST ...");
+                    $stream = $request->getBody();
+                    $payload = $stream->getContents();
+                    $stream->rewind();
+                    $signature = $this->signer->getSignatureFromPrivateKey($payload);
+                }
+                else if ($request->getMethod() == "GET"){
+                    $this->logger->info("Beginning signature from folioConsulta ...");
+                    $parts = explode("/", $request->getUri());
+                    $folioConsulta = $parts[5];
+                    $signature = $this->signer->getSignatureFromPrivateKey($folioConsulta);
+                }
             }catch (Exception $e) {
                 $this->logger->error('Exception when calling add_signature_header: '.$e->getMessage().PHP_EOL);
                 exit(1);
@@ -40,14 +48,19 @@ class MiddlewareEvents
             $verified = false;
             $super_response = null;
             try{
-                $this->logger->info("Begining verification...");
+                $this->logger->info("Beginning verification...");
                 $status_code = $response->getStatusCode();
                 $this->logger->info("Status code: ".$status_code);
                 $stream = $response->getBody();
                 $payload = $stream->getContents();
                 $stream->rewind();
-                $this->logger->info("Payload to verify: ".$payload);
                 if($status_code == 200){
+                    if (strlen($payload) >= 180){
+                        $this->logger->info("Payload to verify: ".substr($payload, 0, 180)."...Truncated");
+                    }
+                    else{
+                        $this->logger->info("Payload to verify: ".$payload);
+                    }
                     if(isset($response->getHeaders()[$header][0])){
                         $signature = $response->getHeaders()[$header][0];                   
                         $verified = $this->signer->getVerificationFromPublicKey($payload, $signature);
@@ -55,15 +68,19 @@ class MiddlewareEvents
                             $this->logger->error("Could not verify the signature");
                             $this->logger->warning("The response could be modified");
                         }
+                        else{
+                            $this->logger->info("Signature is OK");
+                        }
                         $super_response = $response;
                     }
                     else{
                         $this->logger->error("Could not retrieve the signature");
-                        $new_stream = build_error("500", "No se recibió la firma");
+                        $new_stream = build_error("403", "No se recibió la firma");
                         $super_response = $response->withBody($new_stream)->withStatus(403);
                     }
                 }
                 else{
+                    $this->logger->info("Nothing to verify");
                     $super_response = $response;
                 }
             }
@@ -78,11 +95,11 @@ class MiddlewareEvents
 }
 
 function build_error($code, $message){
-    $error = new \Telcos\Client\Model\Error([
+    $error = new \Telcos\MX\Client\Model\Error([
         "code" => $code,
         "message" => $message
     ]);
-    $errors = new \Telcos\Client\Model\Errores(["errors" => [$error]]);
+    $errors = new \Telcos\MX\Client\Model\Errores(["errors" => [$error]]);
     $resource = fopen('data://text/plain,' . $errors,'r');
     $new_reponse = new \GuzzleHttp\Psr7\Stream($resource);
     

@@ -1,25 +1,27 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class Respuesta implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'Respuesta';
+    protected static $telcosModelName = 'Respuesta';
     
-    protected static $TelcosSimulacionTypes = [
+    protected static $telcosTypes = [
+        'folio_otorgante' => 'string',
         'folio_consulta' => 'string',
         'observacion' => 'string',
-        'persona' => '\Telcos\Client\Model\PersonaRespuesta',
-        'domicilios' => '\Telcos\Client\Model\DomicilioRespuesta[]',
-        'servicios' => '\Telcos\Client\Model\Servicios'
+        'persona' => '\Telcos\MX\Client\Model\PersonaRespuesta',
+        'domicilios' => '\Telcos\MX\Client\Model\DomicilioRespuesta[]',
+        'servicios' => '\Telcos\MX\Client\Model\Servicios'
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
+        'folio_otorgante' => null,
         'folio_consulta' => null,
         'observacion' => null,
         'persona' => null,
@@ -27,17 +29,18 @@ class Respuesta implements ModelInterface, ArrayAccess
         'servicios' => null
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
+        'folio_otorgante' => 'folioOtorgante',
         'folio_consulta' => 'folioConsulta',
         'observacion' => 'observacion',
         'persona' => 'persona',
@@ -46,6 +49,7 @@ class Respuesta implements ModelInterface, ArrayAccess
     ];
     
     protected static $setters = [
+        'folio_otorgante' => 'setFolioOtorgante',
         'folio_consulta' => 'setFolioConsulta',
         'observacion' => 'setObservacion',
         'persona' => 'setPersona',
@@ -54,6 +58,7 @@ class Respuesta implements ModelInterface, ArrayAccess
     ];
     
     protected static $getters = [
+        'folio_otorgante' => 'getFolioOtorgante',
         'folio_consulta' => 'getFolioConsulta',
         'observacion' => 'getObservacion',
         'persona' => 'getPersona',
@@ -78,7 +83,7 @@ class Respuesta implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     
@@ -87,6 +92,7 @@ class Respuesta implements ModelInterface, ArrayAccess
     
     public function __construct(array $data = null)
     {
+        $this->container['folio_otorgante'] = isset($data['folio_otorgante']) ? $data['folio_otorgante'] : null;
         $this->container['folio_consulta'] = isset($data['folio_consulta']) ? $data['folio_consulta'] : null;
         $this->container['observacion'] = isset($data['observacion']) ? $data['observacion'] : null;
         $this->container['persona'] = isset($data['persona']) ? $data['persona'] : null;
@@ -103,6 +109,17 @@ class Respuesta implements ModelInterface, ArrayAccess
     public function valid()
     {
         return count($this->listInvalidProperties()) === 0;
+    }
+    
+    public function getFolioOtorgante()
+    {
+        return $this->container['folio_otorgante'];
+    }
+    
+    public function setFolioOtorgante($folio_otorgante)
+    {
+        $this->container['folio_otorgante'] = $folio_otorgante;
+        return $this;
     }
     
     public function getFolioConsulta()

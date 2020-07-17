@@ -1,32 +1,32 @@
 <?php
 
-namespace Telcos\Client\Model;
+namespace Telcos\MX\Client\Model;
 
 use \ArrayAccess;
-use \Telcos\Client\ObjectSerializer;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class TelefoniaCelular implements ModelInterface, ArrayAccess
 {
     const DISCRIMINATOR = null;
     
-    protected static $TelcosSimulacionModelName = 'TelefoniaCelular';
+    protected static $telcosModelName = 'TelefoniaCelular';
     
-    protected static $TelcosSimulacionTypes = [
+    protected static $telcosTypes = [
         
     ];
     
-    protected static $TelcosSimulacionFormats = [
+    protected static $telcosFormats = [
         
     ];
     
-    public static function TelcosSimulacionTypes()
+    public static function telcosTypes()
     {
-        return self::$TelcosSimulacionTypes;
+        return self::$telcosTypes;
     }
     
-    public static function TelcosSimulacionFormats()
+    public static function telcosFormats()
     {
-        return self::$TelcosSimulacionFormats;
+        return self::$telcosFormats;
     }
     
     protected static $attributeMap = [
@@ -58,7 +58,7 @@ class TelefoniaCelular implements ModelInterface, ArrayAccess
     
     public function getModelName()
     {
-        return self::$TelcosSimulacionModelName;
+        return self::$telcosModelName;
     }
     
     

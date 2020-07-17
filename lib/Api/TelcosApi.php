@@ -1,6 +1,6 @@
 <?php
 
-namespace Telcos\Client\Api;
+namespace Telcos\MX\Client\Api;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
@@ -8,10 +8,10 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MultipartStream;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\RequestOptions;
-use Telcos\Client\ApiException;
-use Telcos\Client\Configuration;
-use Telcos\Client\HeaderSelector;
-use Telcos\Client\ObjectSerializer;
+use Telcos\MX\Client\ApiException;
+use Telcos\MX\Client\Configuration;
+use Telcos\MX\Client\HeaderSelector;
+use Telcos\MX\Client\ObjectSerializer;
 
 class TelcosApi
 {
@@ -21,6 +21,8 @@ class TelcosApi
     protected $config;
     
     protected $headerSelector;
+
+    public $statusCode;
     
     public function __construct(
         ClientInterface $client = null,
@@ -37,6 +39,11 @@ class TelcosApi
         return $this->config;
     }
     
+    public function getStatusCode()
+    {
+        return $this->statusCode;
+    }  
+
     public function getReporte($x_api_key, $username, $password, $body)
     {
         list($response) = $this->getReporteWithHttpInfo($x_api_key, $username, $password, $body);
@@ -45,7 +52,7 @@ class TelcosApi
     
     public function getReporteWithHttpInfo($x_api_key, $username, $password, $body)
     {
-        $returnType = '\Telcos\Client\Model\Respuesta';
+        $returnType = '\Telcos\MX\Client\Model\Respuesta';
         $request = $this->getReporteRequest($x_api_key, $username, $password, $body);
         try {
             $options = $this->createHttpClientOption();
@@ -59,12 +66,12 @@ class TelcosApi
                     $e->getResponse() ? $e->getResponse()->getBody()->getContents() : null
                 );
             }
-            $statusCode = $response->getStatusCode();
-            if ($statusCode < 200 || $statusCode > 299) {
+            $this->statusCode = $response->getStatusCode();
+            if ($this->statusCode < 200 || $this->statusCode > 299) {
                 throw new ApiException(
                     sprintf(
                         '[%d] Error connecting to the API (%s)',
-                        $statusCode,
+                        $this->statusCode,
                         $request->getUri()
                     ),
                     $statusCode,
@@ -91,7 +98,7 @@ class TelcosApi
                 case 200:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Telcos\Client\Model\Respuesta',
+                        '\Telcos\MX\Client\Model\Respuesta',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -99,7 +106,7 @@ class TelcosApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Telcos\Client\Model\Errores',
+                        '\Telcos\MX\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -107,7 +114,7 @@ class TelcosApi
                 case 401:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Telcos\Client\Model\Errores',
+                        '\Telcos\MX\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -115,7 +122,23 @@ class TelcosApi
                 case 403:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Telcos\Client\Model\Errores',
+                        '\Telcos\MX\Client\Model\Errores',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 404:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Telcos\MX\Client\Model\Errores',
+                        $e->getResponseHeaders()
+                    );
+                    $e->setResponseObject($data);
+                    break;
+                case 429:
+                    $data = ObjectSerializer::deserialize(
+                        $e->getResponseBody(),
+                        '\Telcos\MX\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -123,7 +146,7 @@ class TelcosApi
                 case 500:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Telcos\Client\Model\Errores',
+                        '\Telcos\MX\Client\Model\Errores',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);
@@ -145,7 +168,7 @@ class TelcosApi
     
     public function getReporteAsyncWithHttpInfo($x_api_key, $username, $password, $body)
     {
-        $returnType = '\Telcos\Client\Model\Respuesta';
+        $returnType = '\Telcos\MX\Client\Model\Respuesta';
         $request = $this->getReporteRequest($x_api_key, $username, $password, $body);
         return $this->client
             ->sendAsync($request, $this->createHttpClientOption())
@@ -211,9 +234,6 @@ class TelcosApi
         $headerParams = [];
         $httpBody = '';
         $multipart = false;
-        if ($x_signature !== null) {
-            $headerParams['x-signature'] = ObjectSerializer::toHeaderValue($x_signature);
-        }
         if ($x_api_key !== null) {
             $headerParams['x-api-key'] = ObjectSerializer::toHeaderValue($x_api_key);
         }

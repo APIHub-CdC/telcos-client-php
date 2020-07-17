@@ -1,7 +1,7 @@
 <?php
 
-namespace Telcos\Client\Model;
-use \Telcos\Client\ObjectSerializer;
+namespace Telcos\MX\Client\Model;
+use \Telcos\MX\Client\ObjectSerializer;
 
 class CatalogoTipoDomicilio
 {
